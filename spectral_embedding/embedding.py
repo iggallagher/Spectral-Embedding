@@ -31,13 +31,6 @@ def safe_inv_sqrt(x):
         return np.power(x, -0.5)
 
 
-def safe_inv(x):
-    if x == 0:
-        return 0
-    else:
-        return 1/x
-    
-    
 def ASE(A, d):
     return left_embed(A, d)
 
@@ -45,10 +38,4 @@ def ASE(A, d):
 def LSE(A, d):
     E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
     L = E @ A @ E
-    return left_embed(L, d)
-
-
-def RWSE(A, d):
-    E = np.diag([safe_inv(d) for d in np.sum(A, axis=0)])
-    L = E @ A
     return left_embed(L, d)
