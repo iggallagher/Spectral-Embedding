@@ -33,7 +33,7 @@ def safe_inv_sqrt(x):
 
 def safe_inv(x):
     if x == 0:
-        return ValueError('x must be non-zero')
+        return 0
     else:
         return 1/x
     
