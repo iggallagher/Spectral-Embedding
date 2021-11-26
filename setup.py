@@ -10,6 +10,4 @@ setup(
     version='0.1',
     license='MIT',
     description='Python package for spectral embedding of networks',
-    long_description=read_file("README.md"),
-    long_description_content_type="text/markdown",
 )
