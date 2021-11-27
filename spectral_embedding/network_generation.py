@@ -34,15 +34,8 @@ def generate_MMSBM(n, B, alpha):
     
     K = len(alpha)
     Z = stats.dirichlet.rvs(alpha, size=n)
-    
-    A = np.zeros((n,n))
-    for i in range(n):
-        for j in range(i):
-            Zij = np.random.choice(range(K), p=Z[i])
-            Zji = np.random.choice(range(K), p=Z[j])
-            A[i,j] = stats.bernoulli.rvs(B[Zij,Zji])
-
-    A = symmetrises(A)
+    Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
+    A = symmetrises(stats.bernoulli.rvs(B[Zij,Zij.T]))
     
     return (A, Z)
 
