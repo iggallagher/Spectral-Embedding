@@ -128,11 +128,11 @@ def generate_WMMSBM(n, alpha, params, distbn):
 
 def generate_WSBM_zero(n, pi, params, distbn, rho):
     (A, Z) = generate_WSBM(n, pi, params, distbn)
-    W = symmetrises(stats.bernoulli.rvs(rho, size=(n,n))
+    W = symmetrises(stats.bernoulli.rvs(rho, size=(n,n)))
     return (W*A, Z)
                     
                     
 def generate_WMMSBM_zero(n, alpha, params, distbn, rho):
     (A, Z) = generate_WMMSBM(n, pi, params, distbn)
-    W = symmetrises(stats.bernoulli.rvs(rho, size=(n,n))
+    W = symmetrises(stats.bernoulli.rvs(rho, size=(n,n)))
     return (W*A, Z)
