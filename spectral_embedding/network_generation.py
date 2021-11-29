@@ -14,12 +14,10 @@ def generate_B(K, rho=1):
 
 
 def generate_SBM(n, B, pi):
-    if B.shape[0] != B.shape[1]:
-        raise ValueError('B must be a square matrix size K-by-K')
-    if len(pi) != B.shape[0]:
-        raise ValueError('pi must be an array length K')
-    
     K = len(pi)
+    if B.shape[0] != K or B.shape[1] != K:
+        raise ValueError('B must be a square matrix size K-by-K')
+    
     Z = np.random.choice(range(K), p=pi, size=n)
     A = symmetrises(stats.bernoulli.rvs(B[Z,:][:,Z]))
     
@@ -27,12 +25,10 @@ def generate_SBM(n, B, pi):
 
 
 def generate_MMSBM(n, B, alpha):
-    if B.shape[0] != B.shape[1]:
-        raise ValueError('B must be a square matrix size K-by-K')
-    if len(alpha) != B.shape[0]:
-        raise ValueError('alpha must be an array length K')
-    
     K = len(alpha)
+    if B.shape[0] != K or B.shape[1] != K:
+        raise ValueError('B must be a square matrix size K-by-K')s
+    
     Z = stats.dirichlet.rvs(alpha, size=n)
     Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
     A = symmetrises(stats.bernoulli.rvs(B[Zij,Zij.T]))
@@ -41,14 +37,102 @@ def generate_MMSBM(n, B, alpha):
 
 
 def generate_DCSBM(n, B, pi):
-    if B.shape[0] != B.shape[1]:
-        raise ValueError('B must be a square matrix size K-by-K')
-    if len(pi) != B.shape[0]:
-        raise ValueError('pi must be an array length K')
-    
     K = len(pi)
+    if B.shape[0] != K or B.shape[1] != K:
+        raise ValueError('B must be a square matrix size K-by-K')
+    
     W = stats.uniform.rvs(size=n)
     Z = np.random.choice(range(K), p=pi, size=n)
     A = symmetrises(stats.bernoulli.rvs(np.outer(W,W) * B[Z,:][:,Z]))
     
     return (A, Z, W)
+
+
+def generate_WSBM(n, pi, params, distbn):
+    K = len(pi)
+    
+    if distbn not in ['beta', 'gaussian', 'poisson']:
+        raise ValueError('distbn must be beta, gaussian or poisson')
+    
+    if distbn == 'beta':
+        if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
+            raise ValueError('params must be two square matrices size K-by-K [alphas, betas]')
+            
+        Z = np.random.choice(range(K), p=pi, size=n)
+        A = symmetrises(stats.beta.rvs(a = params[0][Z,:][:,Z], b = params[1][Z,:][:,Z]))
+        
+    if distbn == 'exponential':
+        if len(params) != 1 or params[0].shape != (K,K):
+            raise ValueError('params must be one square matrix size K-by-K [lambdas]')
+        
+        Z = np.random.choice(range(K), p=pi, size=n)
+        A = symmetrises(stats.expon.rvs(scale = 1/params[0][Z,:][:,Z]))
+        
+    if distbn == 'gaussian':
+        if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
+            raise ValueError('params must be two square matrices size K-by-K [means, variances]')
+            
+        Z = np.random.choice(range(K), p=pi, size=n)
+        A = symmetrises(stats.norm.rvs(loc = params[0][Z,:][:,Z], scale = np.sqrt(params[1][Z,:][:,Z])))
+        
+    if distbn == 'poisson':
+        if len(params) != 1 or params[0].shape != (K,K):
+            raise ValueError('params must be one square matrix size K-by-K [lambdas]')
+        
+        Z = np.random.choice(range(K), p=pi, size=n)
+        A = symmetrises(stats.poisson.rvs(mu = params[0][Z,:][:,Z]))
+    
+    return (A, Z)
+
+
+def generate_WMMSBM(n, alpha, params, distbn):
+    K = len(alpha)
+    
+    if distbn not in ['beta', 'exponential', 'gaussian', 'poisson']:
+        raise ValueError('distbn must be beta, gaussian or poisson')
+    
+    if distbn == 'beta':
+        if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
+            raise ValueError('params must be two square matrices size K-by-K [alphas, betas]')
+            
+        Z = stats.dirichlet.rvs(alpha, size=n)
+        Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
+        A = symmetrises(stats.beta.rvs(a = params[0][Zij,Zij.T], b = params[1][Zij,Zij.T]))
+        
+    if distbn == 'exponential':
+        if len(params) != 1 or params[0].shape != (K,K):
+            raise ValueError('params must be one square matrix size K-by-K [lambdas]')
+        
+        Z = stats.dirichlet.rvs(alpha, size=n)
+        Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
+        A = symmetrises(stats.expon.rvs(scale = 1/params[0][Zij,Zij.T]))
+        
+    if distbn == 'gaussian':
+        if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
+            raise ValueError('params must be two square matrices size K-by-K [means, variances]')
+            
+        Z = stats.dirichlet.rvs(alpha, size=n)
+        Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
+        A = symmetrises(stats.norm.rvs(loc = params[0][Zij,Zij.T], scale = np.sqrt(params[1][Zij,Zij.T])))
+        
+    if distbn == 'poisson':
+        if len(params) != 1 or params[0].shape != (K,K):
+            raise ValueError('params must be one square matrix size K-by-K [lambdas]')
+        
+        Z = stats.dirichlet.rvs(alpha, size=n)
+        Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
+        A = symmetrises(stats.poisson.rvs(mu = params[0][Zij,Zij.T]))
+    
+    return (A, Z)
+
+
+def generate_WSBM_zero(n, pi, params, distbn, rho):
+    (A, Z) = generate_WSBM(n, pi, params, distbn)
+    W = symmetrises(stats.bernoulli.rvs(rho, size=(n,n))
+    return (W*A, Z)
+                    
+                    
+def generate_WMMSBM_zero(n, alpha, params, distbn, rho):
+    (A, Z) = generate_WMMSBM(n, pi, params, distbn)
+    W = symmetrises(stats.bernoulli.rvs(rho, size=(n,n))
+    return (W*A, Z)
