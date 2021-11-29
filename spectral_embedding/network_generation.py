@@ -27,7 +27,7 @@ def generate_SBM(n, B, pi):
 def generate_MMSBM(n, B, alpha):
     K = len(alpha)
     if B.shape[0] != K or B.shape[1] != K:
-        raise ValueError('B must be a square matrix size K-by-K')s
+        raise ValueError('B must be a square matrix size K-by-K')
     
     Z = stats.dirichlet.rvs(alpha, size=n)
     Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
