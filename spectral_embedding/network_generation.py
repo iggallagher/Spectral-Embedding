@@ -51,7 +51,7 @@ def generate_DCSBM(n, B, pi):
 def generate_WSBM(n, pi, params, distbn):
     K = len(pi)
     
-    if distbn not in ['beta', 'gaussian', 'poisson']:
+    if distbn not in ['beta', 'exponential', 'gaussian', 'poisson']:
         raise ValueError('distbn must be beta, gaussian or poisson')
     
     if distbn == 'beta':
