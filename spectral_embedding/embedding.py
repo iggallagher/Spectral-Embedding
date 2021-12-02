@@ -39,3 +39,32 @@ def LSE(A, d):
     E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
     L = E @ A @ E
     return left_embed(L, d)
+
+
+def UASE(As, d):
+    T = len(As)
+    A = np.block([A for A in As])
+    XA, YA = both_embed(A, d)
+    
+    YAs = np.zeros((T,n,d))
+    for t in range(T):
+        YAs[t] = YA[t*n:(t+1)*n]
+        
+    return (XA, YAs)
+
+
+def omnibus(As, d):
+    T = len(As)
+    
+    A = np.zeros((T*n,T*n))
+    for t1 in range(T):
+        for t2 in range(T):
+            A[t1*n:(t1+1)*n,t2*n:(t2+1)*n] = (As[t1] + As[t2])/2
+            
+    YA = left_embed(A, d)
+    YAs = np.zeros((T,n,d))
+    for t in range(T):
+        YAs[t] = YA[t*n:(t+1)*n]
+        
+    return YAs
+ 
