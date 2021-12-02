@@ -67,4 +67,3 @@ def omnibus(As, d):
         YAs[t] = YA[t*n:(t+1)*n]
         
     return YAs
- 
