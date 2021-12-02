@@ -43,6 +43,8 @@ def LSE(A, d):
 
 def UASE(As, d):
     T = len(As)
+    n = As[0].shape[0]
+    
     A = np.block([A for A in As])
     XA, YA = both_embed(A, d)
     
@@ -55,6 +57,7 @@ def UASE(As, d):
 
 def omnibus(As, d):
     T = len(As)
+    n = As[0].shape[0]
     
     A = np.zeros((T*n,T*n))
     for t1 in range(T):
