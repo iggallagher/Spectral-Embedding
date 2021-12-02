@@ -136,3 +136,47 @@ def generate_WMMSBM_zero(n, alpha, params, distbn, rho):
     (A, Z) = generate_WMMSBM(n, pi, params, distbn)
     W = symmetrises(stats.bernoulli.rvs(rho, size=(n,n)))
     return (W*A, Z)
+
+
+def generate_SBM_dynamic(n, Bs, pi):
+    K = len(pi)
+    T = Bs.shape[0]
+    if Bs.shape[1] != K or B.shape[2] != K :
+        raise ValueError('Bs must be array of T square matrices size K-by-K')
+    
+    Z = np.random.choice(range(K), p=pi, size=n)
+    As = np.zeros((T,n,n))
+    for t in range(T):
+        As[t] = symmetrises(stats.bernoulli.rvs(Bs[t][Z,:][:,Z]))
+    
+    return (As, Z)
+
+
+def generate_MMSBM_dynamic(n, Bs, alpha):
+    K = len(alpha)
+    T = Bs.shape[0]
+    if Bs.shape[1] != K or B.shape[2] != K :
+        raise ValueError('Bs must be array of T square matrices size K-by-K')
+    
+    Z = np.random.choice(range(K), p=pi, size=n)
+    As = np.zeros((T,n,n))
+    for t in range(T):
+        Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
+        As[t] = symmetrises(stats.bernoulli.rvs(Bs[t][Zij,Zij.T]))
+    
+    return (As, Z)
+
+
+def generate_DCSBM_dynamic(n, Bs, pi):
+    K = len(pi)
+    T = Bs.shape[0]
+    if Bs.shape[1] != K or B.shape[2] != K :
+        raise ValueError('Bs must be array of T square matrices size K-by-K')
+    
+    W = stats.uniform.rvs(size=n)
+    Z = np.random.choice(range(K), p=pi, size=n)
+    As = np.zeros((T,n,n))
+    for t in range(T):
+        As[t] = symmetrises(stats.bernoulli.rvs(np.outer(W,W) * Bs[t][Z,:][:,Z]))
+    
+    return (As, Z, W)
