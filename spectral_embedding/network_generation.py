@@ -141,7 +141,7 @@ def generate_WMMSBM_zero(n, alpha, params, distbn, rho):
 def generate_SBM_dynamic(n, Bs, pi):
     K = len(pi)
     T = Bs.shape[0]
-    if Bs.shape[1] != K or B.shape[2] != K :
+    if Bs.shape[1] != K or Bs.shape[2] != K :
         raise ValueError('Bs must be array of T square matrices size K-by-K')
     
     Z = np.random.choice(range(K), p=pi, size=n)
@@ -155,7 +155,7 @@ def generate_SBM_dynamic(n, Bs, pi):
 def generate_MMSBM_dynamic(n, Bs, alpha):
     K = len(alpha)
     T = Bs.shape[0]
-    if Bs.shape[1] != K or B.shape[2] != K :
+    if Bs.shape[1] != K or Bs.shape[2] != K :
         raise ValueError('Bs must be array of T square matrices size K-by-K')
     
     Z = np.random.choice(range(K), p=pi, size=n)
@@ -170,7 +170,7 @@ def generate_MMSBM_dynamic(n, Bs, alpha):
 def generate_DCSBM_dynamic(n, Bs, pi):
     K = len(pi)
     T = Bs.shape[0]
-    if Bs.shape[1] != K or B.shape[2] != K :
+    if Bs.shape[1] != K or Bs.shape[2] != K :
         raise ValueError('Bs must be array of T square matrices size K-by-K')
     
     W = stats.uniform.rvs(size=n)
