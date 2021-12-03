@@ -25,7 +25,7 @@ def gaussian_ellipse(mean, cov):
 
 
 def SBM_covariance(A, B, Z, pi, d):
-    return WSBM_covariance(A, B, B*(1-B), Z, pi, d):
+    return WSBM_covariance(A, B, B*(1-B), Z, pi, d)
 
 
 def WSBM_covariance(A, B, C, Z, pi, d):
