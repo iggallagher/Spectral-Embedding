@@ -1,11 +1,11 @@
 import numpy as np
 
 
-def SBM_covariance(A, B, Z, pi, d):
-    return WSBM_covariance(A, B, B*(1-B), Z, pi, d)
+def SBM_distbn(A, B, Z, pi, d):
+    return WSBM_distbn(A, B, B*(1-B), Z, pi, d)
 
 
-def WSBM_covariance(A, B, C, Z, pi, d):
+def WSBM_distbn(A, B, C, Z, pi, d):
     P = B[Z,:][:,Z]
     K = B.shape[0]
             
