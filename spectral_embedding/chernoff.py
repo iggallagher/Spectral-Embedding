@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import minimize 
 
 
-def chernoff_full(X, SigmaXs):
+def chernoff(X, SigmaXs):
     CIs = chernoff_full(X, SigmaXs)
     return np.min(CIs[np.nonzero(CIs)])
     
