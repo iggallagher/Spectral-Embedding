@@ -70,3 +70,36 @@ def omnibus(As, d):
         YAs[t] = YA[t*n:(t+1)*n]
         
     return YAs
+
+
+def dim_select(A, plot=True, max_dim=100):        
+    SA = np.linalg.svd(A, compute_uv=False)
+    
+    # If no max dimension chosen, set to the number of nodes
+    if max_dim == 0:
+        max_dim = len(SA)
+    
+    # Compute likelihood profile
+    lq = np.zeros(max_dim); lq[0] = 'nan'
+    for q in range(1,max_dim):
+        theta_0 = np.mean(SA[:q])
+        theta_1 = np.mean(SA[q:max_dim])
+        sigma = np.sqrt(((q-1)*np.var(SA[:q]) + (max_dim-q-1)*np.var(SA[q:max_dim])) / (max_dim-2))
+        lq_0 = np.sum(np.log(stats.norm.pdf(SA[:q], theta_0, sigma)))
+        lq_1 = np.sum(np.log(stats.norm.pdf(SA[q:max_dim], theta_1, sigma)))
+        lq[q] = lq_0 +lq_1    
+    lq_best = np.nanargmax(lq)
+
+    if plot:
+        fig, axs = plt.subplots(2, 1, figsize=(8.0,6.0), sharex=True)
+        
+        axs[0].plot(range(1,max_dim+1), SA[:max_dim], '.-')
+        axs[0].set_title('Singular values')
+        axs[0].axvline(x=lq_best, ls='--', c='k')
+
+        axs[1].plot(range(max_dim), lq[:max_dim], '.-')
+        axs[1].set_title('Log likelihood')
+        axs[1].set_xlabel('Number of dimensions')
+        axs[1].axvline(x=lq_best, ls='--', c='k');
+        
+    return lq_best
