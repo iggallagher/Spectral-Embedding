@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy import stats
 
 
@@ -73,34 +74,48 @@ def omnibus(As, d):
     return YAs
 
 
-def dim_select(A, plot=True, max_dim=100):        
+def dim_select(A, max_dim=100):        
     SA = np.linalg.svd(A, compute_uv=False)
     
-    # If no max dimension chosen, set to the number of nodes
-    if max_dim == 0:
+    # If no max dimension chosen or above number of nodes, set to the number of nodes
+    if max_dim == 0 or max_dim > len(SA):
         max_dim = len(SA)
     
     # Compute likelihood profile
-    lq = np.zeros(max_dim); lq[0] = 'nan'
-    for q in range(1,max_dim):
-        theta_0 = np.mean(SA[:q])
-        theta_1 = np.mean(SA[q:max_dim])
-        sigma = np.sqrt(((q-1)*np.var(SA[:q]) + (max_dim-q-1)*np.var(SA[q:max_dim])) / (max_dim-2))
-        lq_0 = np.sum(np.log(stats.norm.pdf(SA[:q], theta_0, sigma)))
-        lq_1 = np.sum(np.log(stats.norm.pdf(SA[q:max_dim], theta_1, sigma)))
-        lq[q] = lq_0 +lq_1    
-    lq_best = np.nanargmax(lq)
+    lq = np.zeros(max_dim-1)
+    for q in range(max_dim-1):
+        # Break between qth and (q+1)th singular values
+        theta_0 = np.mean(SA[:q+1])
+        theta_1 = np.mean(SA[q+1:max_dim])
+        sigma = np.sqrt(((q-1)*np.var(SA[:q+1]) + (max_dim-q-1)*np.var(SA[q+1:max_dim])) / (max_dim-2))
+        lq_0 = np.sum(np.log(stats.norm.pdf(SA[:q+1], theta_0, sigma)))
+        lq_1 = np.sum(np.log(stats.norm.pdf(SA[q+1:max_dim], theta_1, sigma)))
+        lq[q] = lq_0 +lq_1
+       
+    # Return best number of dimensions
+    lq_best = np.nanargmax(lq)+1
+    
+    return lq_best, lq, SA[:max_dim]
 
-    if plot:
-        fig, axs = plt.subplots(2, 1, figsize=(8.0,6.0), sharex=True)
-        
-        axs[0].plot(range(1,max_dim+1), SA[:max_dim], '.-')
-        axs[0].set_title('Singular values')
-        axs[0].axvline(x=lq_best, ls='--', c='k')
 
-        axs[1].plot(range(max_dim), lq[:max_dim], '.-')
-        axs[1].set_title('Log likelihood')
-        axs[1].set_xlabel('Number of dimensions')
-        axs[1].axvline(x=lq_best, ls='--', c='k');
+def plot_dim_select(lq_best, lq, S, max_plot=50):
+    max_dim = len(S)
+    
+    # If no max plot chosen or above number of nodes, set to maximum dimension
+    if max_plot == 0 or max_plot > max_dim:
+        max_plot = max_dim
+    
+    fig, axs = plt.subplots(2, 1, figsize=(8.0,6.0), sharex=True)
         
-    return lq_best
+    axs[0].plot(range(1,max_dim+1), S, '.')
+    axs[0].set_title('Singular values')
+    axs[0].set_xlim([0,max_plot])
+    axs[0].axvline(x=lq_best+0.5, ls='--', c='k')
+    
+    axs[1].plot(range(1,max_dim), lq, '.')
+    axs[1].set_title('Log likelihood')
+    axs[1].set_xlabel('Number of dimensions')
+    axs[1].set_xlim([0,max_plot])
+    axs[1].axvline(x=lq_best+0.5, ls='--', c='k')
+        
+    return
