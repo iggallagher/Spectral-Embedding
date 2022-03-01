@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import stats
+import scipy.stats as stats
 
 
 def left_embed(A, d):
