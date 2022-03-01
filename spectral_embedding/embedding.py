@@ -72,7 +72,7 @@ def omnibus(As, d):
         YAs[t] = YA[t*n:(t+1)*n]
         
     return YAs
-
+    
 
 def dim_select(A, max_dim=100):        
     SA = np.linalg.svd(A, compute_uv=False)
@@ -88,8 +88,8 @@ def dim_select(A, max_dim=100):
         theta_0 = np.mean(SA[:q+1])
         theta_1 = np.mean(SA[q+1:max_dim])
         sigma = np.sqrt(((q-1)*np.var(SA[:q+1]) + (max_dim-q-1)*np.var(SA[q+1:max_dim])) / (max_dim-2))
-        lq_0 = np.sum(np.log(stats.norm.pdf(SA[:q+1], theta_0, sigma)))
-        lq_1 = np.sum(np.log(stats.norm.pdf(SA[q+1:max_dim], theta_1, sigma)))
+        lq_0 = np.sum(stats.norm.logpdf(SA[:q+1], theta_0, sigma))
+        lq_1 = np.sum(stats.norm.logpdf(SA[q+1:max_dim], theta_1, sigma))
         lq[q] = lq_0 +lq_1
        
     # Return best number of dimensions
