@@ -43,6 +43,12 @@ def LSE(A, d):
     return left_embed(L, d)
 
 
+def RWSE(A, d):
+    E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
+    XL = LSE(A, d)
+    return (E @ XL)[:,1:]
+
+
 def UASE(As, d):
     T = len(As)
     n = As[0].shape[0]
