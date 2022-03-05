@@ -41,7 +41,7 @@ def generate_DCSBM(n, B, pi, a=1, b=1):
     if B.shape[0] != K or B.shape[1] != K:
         raise ValueError('B must be a square matrix size K-by-K')
     
-    W = stats.beta.rvs(size=n, a, b)
+    W = stats.beta.rvs(size=n, a=a, b=b)
     Z = np.random.choice(range(K), p=pi, size=n)
     A = symmetrises(stats.bernoulli.rvs(np.outer(W,W) * B[Z,:][:,Z]))
     
