@@ -50,15 +50,11 @@ def RWSE(A, d):
 
 
 def UASE(As, d):
-    T = len(As)
-    n = As[0].shape[0]
+    T, n, _ = As.shape
     
     A = np.block([A for A in As])
     XA, YA = both_embed(A, d)
-    
-    YAs = np.zeros((T,n,d))
-    for t in range(T):
-        YAs[t] = YA[t*n:(t+1)*n]
+    YAs = YA.reshape((T, n, d))
         
     return (XA, YAs)
 
