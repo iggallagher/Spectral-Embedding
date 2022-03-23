@@ -4,9 +4,9 @@ import scipy.stats as stats
 
 def symmetrises(A, diag=False):
     if diag:
-        return np.tril(A,0) + np.transpose(np.tril(A,-1))
+        return np.tril(A,0) + np.tril(A,-1).T
     else:
-        return np.tril(A,-1) + np.transpose(np.tril(A,-1))
+        return np.tril(A,-1) + np.tril(A,-1).T
 
     
 def generate_B(K, rho=1):
