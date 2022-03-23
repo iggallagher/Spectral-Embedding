@@ -67,9 +67,14 @@ def RWSE(A, d):
 
 
 def UASE(As, d):
-    T, n, _ = As.shape
+    T = len(As)
+    n = As[0].shape[0]
     
-    A = np.block([A for A in As])
+    if np.all([sparse.issparse(A) for A in As]):
+        A = sparse.hstack(As)
+    else:
+        A = np.block([A for A in As])
+        
     XA, YA = both_embed(A, d)
     YAs = YA.reshape((T, n, d))
         
