@@ -52,7 +52,7 @@ def ASE(A, d):
 
 def LSE(A, d):
     if sparse.issparse(A):
-        sparse.csgraph.laplacian(A, normed=True)
+        L = sparse.csgraph.laplacian(A, normed=True)
     else:
         E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
         L = E @ A @ E
