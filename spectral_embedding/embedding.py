@@ -1,23 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
+import scipy.sparse as sparse
 
 
 def left_embed(A, d):
-    UA, SA, VAt = np.linalg.svd(A)
+    if sparse.isspmatrix(A):
+        UA, SA, VAt = sparse.linalg.svds(A, d)
+    else:
+        UA, SA, VAt = np.linalg.svd(A)
     XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
     return XA
 
 
 def right_embed(A, d):
-    UA, SA, VAt = np.linalg.svd(A)
+    if sparse.isspmatrix(A):
+        UA, SA, VAt = sparse.linalg.svds(A, d)
+    else:
+        UA, SA, VAt = np.linalg.svd(A)
     VA = VAt.T
     YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
     return YA
 
 
 def both_embed(A, d):
-    UA, SA, VAt = np.linalg.svd(A)
+    if sparse.isspmatrix(A):
+        UA, SA, VAt = sparse.linalg.svds(A, d)
+    else:
+        UA, SA, VAt = np.linalg.svd(A)
     VA = VAt.T
     XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))
     YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
