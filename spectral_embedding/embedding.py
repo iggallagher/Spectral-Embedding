@@ -5,29 +5,32 @@ import scipy.sparse as sparse
 
 
 def left_embed(A, d):
-    if sparse.isspmatrix(A):
+    if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
     else:
         UA, SA, VAt = np.linalg.svd(A)
+        
     XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
     return XA
 
 
 def right_embed(A, d):
-    if sparse.isspmatrix(A):
+    if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
     else:
         UA, SA, VAt = np.linalg.svd(A)
+        
     VA = VAt.T
     YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
     return YA
 
 
 def both_embed(A, d):
-    if sparse.isspmatrix(A):
+    if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
     else:
         UA, SA, VAt = np.linalg.svd(A)
+        
     VA = VAt.T
     XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))
     YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
@@ -48,8 +51,12 @@ def ASE(A, d):
 
 
 def LSE(A, d):
-    E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
-    L = E @ A @ E
+    if sparse.issparse(A):
+        sparse.csgraph.laplacian(A, normed=True)
+    else:
+        E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
+        L = E @ A @ E
+        
     return left_embed(L, d)
 
 
