@@ -7,7 +7,7 @@ import scipy.sparse as sparse
 def left_embed(A, d):
     if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
-        XA = UA[:,d:0] @ np.diag(np.sqrt(SA[d:0]))
+        XA = np.fliplr(UA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
     else:
         UA, SA, VAt = np.linalg.svd(A)
         XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
@@ -18,7 +18,7 @@ def right_embed(A, d):
     if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
         VA = VAt.T
-        YA = VA[:,d:0] @ np.diag(np.sqrt(SA[d:0])) 
+        YA = np.fliplr(VA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
     else:
         UA, SA, VAt = np.linalg.svd(A)
         VA = VAt.T
@@ -30,8 +30,8 @@ def both_embed(A, d):
     if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
         VA = VAt.T
-        XA = UA[:,d:0] @ np.diag(np.sqrt(SA[d:0]))
-        YA = VA[:,d:0] @ np.diag(np.sqrt(SA[d:0])) 
+        XA = np.fliplr(UA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
+        YA = np.fliplr(VA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d]))) 
     else:
         UA, SA, VAt = np.linalg.svd(A)
         VA = VAt.T
