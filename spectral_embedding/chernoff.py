@@ -20,7 +20,7 @@ def chernoff_full(X, SigmaXs):
 
 
 def renyi(t, X0, X1, SigmaX0, SigmaX1):
-    return 0.5*t*(1-t) * (X0-X1).T @ np.linalg.inv(t*SigmaX0 + (1-t)*SigmaX1) @ (X0-X1)
+    return 0.5*t*(1-t) * (X0-X1).T @ np.linalg.inv((1-t)*SigmaX0 + t*SigmaX1) @ (X0-X1)
 
 
 def logit(x):
