@@ -154,7 +154,7 @@ def WDCSBM_distbn(A, B, C, Z, pi, d, ws, a=2, b=2):
     Lambda = XBinv @ B @ XBinv.T
         
     Sigma = np.zeros((w,K,d,d))
-    for t, i, w in itertools.product(range(w), range(K), range(K)):
+    for t, i, j in itertools.product(range(w), range(K), range(K)):
         Sigma[t,i] += pi[j]*(ws[t]*EW3*(C[i,j]+B[i,j]**2) - ws[t]**2*EW4*B[i,j]**2)*np.outer(XB[j],XB[j])
         
     Delta = np.zeros((d,d))
