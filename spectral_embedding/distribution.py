@@ -59,7 +59,7 @@ def dirichlet_moment(alpha, beta):
     return moment
 
 
-def MMSBM_distbn(A, B, C, Z, alpha, d):
+def MMSBM_distbn(A, B, Z, alpha, d):
     return WMMSBM_distbn(A, B, B*(1-B), Z, alpha, d)
 
 
