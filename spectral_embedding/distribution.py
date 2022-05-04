@@ -1,4 +1,5 @@
 import numpy as np
+import itertools
 from scipy.special import gamma
 
 
@@ -59,13 +60,14 @@ def dirichlet_moment(alpha, beta):
     return moment
 
 
-def MMSBM_distbn(A, B, Z, alpha, d):
-    return WMMSBM_distbn(A, B, B*(1-B), Z, alpha, d)
+def MMSBM_distbn(A, B, Z, alpha, d, zs):
+    return WMMSBM_distbn(A, B, B*(1-B), Z, alpha, d, zs)
 
 
-def WMMSBM_distbn(A, B, C, Z, alpha, d):
+def WMMSBM_distbn(A, B, C, Z, alpha, d, zs):
     P = Z @ B @ Z.T
     K = len(alpha)
+    z = len(zs)
             
     # Spectral embeddings
     UA, SA, VAt = np.linalg.svd(A); VA = VAt.T
@@ -81,24 +83,26 @@ def WMMSBM_distbn(A, B, C, Z, alpha, d):
     W = UW @ VWt
     L = np.linalg.inv(XZ.T @ XZ) @ XZ.T @ XP
     
-    X = XB @ L @ W
+    X = np.zeros((z,d))
+    for t in range(z):
+        for i in range(K):
+            X[t] += zs[t,i] * XB[i] @ L @ W
     
     # Covariance matrices
     XBinv = np.linalg.pinv(XB)
     Lambda = XBinv @ B @ XBinv.T
     
-    Sigma = np.zeros((K,d,d))
-    for i in range(K):
-        for j in range(K):
-            for k in range(K):
-                for l in range(K):
-                    beta_C = np.zeros((K))
-                    beta_C[j] += 1; beta_C[k] += 1; beta_C[l] += 1
-                    beta_B = np.zeros((K))
-                    beta_B[j] += 2; beta_B[k] += 1; beta_B[l] += 1
-                    Sigma[i] += (dirichlet_moment(alpha, beta_C)*C[i,j] - 
-                                 dirichlet_moment(alpha, beta_B)*B[i,j]**2) * np.outer(XB[k],XB[l])
-        
+    Sigma = np.zeros((z,d,d))
+    for t, i, j, m, n in itertools.product(range(z), range(K), range(K), range(K), range(K)):
+        beta = np.zeros((K))
+        beta[j] += 1; beta[m] += 1; beta[n] += 1
+        Sigma[t] += zs[t,i] * dirichlet_moment(alpha, beta) * (C[i,j] + B[i,j]**2) * np.outer(XB[m],XB[n])
+
+    for t, i, j, k, l, m, n in itertools.product(range(z), range(K), range(K), range(K), range(K), range(K), range(K)):
+        beta = np.zeros((K))
+        beta[j] += 1; beta[l] += 1; beta[m] += 1; beta[n] += 1
+        Sigma[t] -= zs[t,i] * zs[t,k] * dirichlet_moment(alpha, beta) * B[i,j] * B[k,l] * np.outer(XB[m],XB[n])
+    
     Delta = np.zeros((d,d))
     for i in range(K):
         for j in range(K):
@@ -107,9 +111,9 @@ def WMMSBM_distbn(A, B, C, Z, alpha, d):
             Delta += dirichlet_moment(alpha, beta) * np.outer(XB[i],XB[j])
    
     D = np.linalg.inv(Lambda @ Delta @ Lambda.T) @ Lambda
-    SigmaX = np.zeros((K,d,d))
-    for i in range(K):
-        SigmaX[i] = W.T @ L.T @ D @ Sigma[i] @ D.T @ L @ W
+    SigmaX = np.zeros((z,d,d))
+    for t in range(z):
+        SigmaX[t] = W.T @ L.T @ D @ Sigma[t] @ D.T @ L @ W
    
     return (X, SigmaX)
 
@@ -150,10 +154,8 @@ def WDCSBM_distbn(A, B, C, Z, pi, d, ws, a=2, b=2):
     Lambda = XBinv @ B @ XBinv.T
         
     Sigma = np.zeros((w,K,d,d))
-    for t in range(w):
-        for i in range(K):
-            for j in range(K):
-                Sigma[t,i] += pi[j]*(ws[t]*EW3*(C[i,j]+B[i,j]**2) - ws[t]**2*EW4*B[i,j]**2)*np.outer(XB[j],XB[j])
+    for t, i, w in itertools.product(range(w), range(K), range(K)):
+        Sigma[t,i] += pi[j]*(ws[t]*EW3*(C[i,j]+B[i,j]**2) - ws[t]**2*EW4*B[i,j]**2)*np.outer(XB[j],XB[j])
         
     Delta = np.zeros((d,d))
     for i in range(K):
@@ -197,11 +199,9 @@ def WSBM_dynamic_distbn(As, Bs, Cs, Z, pi, d):
     
     # Covariance matrices    
     Sigmas = np.zeros((T,K,d,d))
-    for t in range(T):
-        for i in range(K):
-            for j in range(K):
-                Sigmas[t,i] += pi[j]*Cs[t,i,j]*np.outer(XB[j],XB[j])
-          
+    for t, i, j in itertools.product(range(T), range(K), range(K)):
+        Sigmas[t,i] += pi[j]*Cs[t,i,j]*np.outer(XB[j],XB[j])
+          s
     Delta = np.zeros((d,d))
     for i in range(K):
         Delta += pi[i]*np.outer(XB[i],XB[i])
