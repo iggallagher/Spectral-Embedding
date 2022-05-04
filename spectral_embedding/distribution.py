@@ -201,7 +201,7 @@ def WSBM_dynamic_distbn(As, Bs, Cs, Z, pi, d):
     Sigmas = np.zeros((T,K,d,d))
     for t, i, j in itertools.product(range(T), range(K), range(K)):
         Sigmas[t,i] += pi[j]*Cs[t,i,j]*np.outer(XB[j],XB[j])
-          s
+
     Delta = np.zeros((d,d))
     for i in range(K):
         Delta += pi[i]*np.outer(XB[i],XB[i])
