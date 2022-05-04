@@ -114,6 +114,60 @@ def WMMSBM_distbn(A, B, C, Z, alpha, d):
     return (X, SigmaX)
 
 
+def DCSBM_distbn(A, B, Z, pi, d, ws, a=2, b=2):
+    return WDCSBM_distbn(A, B, b*(1-B), Z, pi, d, ws, a, b)
+
+    
+def WDCSBM_distbn(A, B, C, Z, pi, d, ws, a=2, b=2):
+    P = B[Z,:][:,Z]
+    K = len(pi)
+    w = len(ws)
+            
+    # Spectral embeddings
+    UA, SA, VAt = np.linalg.svd(A); VA = VAt.T
+    UB, SB, VBt = np.linalg.svd(B); VB = VBt.T
+    UP, SP, VPt = np.linalg.svd(P); VP = VPt.T
+
+    XB = UB[:,0:d] @ np.diag(np.sqrt(SB[0:d]))
+    XP = UP[:,0:d] @ np.diag(np.sqrt(SP[0:d]))
+    XZ = XB[Z,:]
+    
+    # Find spectral embedding map to latent positions
+    UW, _, VWt = np.linalg.svd(UP[:,0:d].T @ UA[:,0:d] + VP[:,0:d].T @ VA[:,0:d])
+    W = UW @ VWt
+    L = np.linalg.inv(XZ.T @ XZ) @ XZ.T @ XP
+    
+    X = np.zeros((w,K,d))
+    for t in range(w):
+        X[t] = ws[t] * XB @ L @ W
+    
+    EW2 = dirichlet_moment([a,b],[2,0])
+    EW3 = dirichlet_moment([a,b],[3,0])
+    EW4 = dirichlet_moment([a,b],[4,0])
+    
+    # Covariance matrices
+    XBinv = np.linalg.pinv(XB)
+    Lambda = XBinv @ B @ XBinv.T
+        
+    Sigma = np.zeros((w,K,d,d))
+    for t in range(w):
+        for i in range(K):
+            for j in range(K):
+                Sigma[t,i] += pi[j]*(ws[t]*EW3*(C[i,j]+B[i,j]**2) - ws[t]**2*EW4*B[i,j]**2)*np.outer(XB[j],XB[j])
+        
+    Delta = np.zeros((d,d))
+    for i in range(K):
+        Delta += EW2*pi[i]*np.outer(XB[i],XB[i])
+   
+    D = np.linalg.inv(Lambda @ Delta @ Lambda.T) @ Lambda
+    SigmaX = np.zeros((w,K,d,d))
+    for t in range(w):
+        for i in range(K):
+            SigmaX[t,i] = W.T @ L.T @ D @ Sigma[t,i] @ D.T @ L @ W
+   
+    return (X, SigmaX)
+
+
 def SBM_dynamic_distbn(As, Bs, Z, pi, d):
     return WSBM_dynamic_distbn(As, Bs, Bs*(1-Bs), Z, pi, d)
 
