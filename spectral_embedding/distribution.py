@@ -119,7 +119,7 @@ def WMMSBM_distbn(A, B, C, Z, alpha, d, zs):
 
 
 def DCSBM_distbn(A, B, Z, pi, d, ws, a=2, b=2):
-    return WDCSBM_distbn(A, B, b*(1-B), Z, pi, d, ws, a, b)
+    return WDCSBM_distbn(A, B, B*(1-B), Z, pi, d, ws, a, b)
 
     
 def WDCSBM_distbn(A, B, C, Z, pi, d, ws, a=2, b=2):
