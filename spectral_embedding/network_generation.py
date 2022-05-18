@@ -95,7 +95,7 @@ def generate_WSBM(n, pi, params, distbn):
 def generate_WMMSBM(n, alpha, params, distbn):
     K = len(alpha)
     
-    if distbn not in ['beta', 'exponential', 'gamma' 'gaussian', 'poisson']:
+    if distbn not in ['beta', 'exponential', 'gamma', 'gaussian', 'poisson']:
         raise ValueError('distbn must be beta, exponential, gamma, gaussian or poisson')
     
     if distbn == 'beta':
