@@ -51,8 +51,8 @@ def generate_DCSBM(n, B, pi, a=1, b=1):
 def generate_WSBM(n, pi, params, distbn):
     K = len(pi)
     
-    if distbn not in ['beta', 'exponential', 'gaussian', 'poisson']:
-        raise ValueError('distbn must be beta, gaussian or poisson')
+    if distbn not in ['beta', 'exponential', 'gamma', 'gaussian', 'poisson']:
+        raise ValueError('distbn must be beta, exponential, gamma, gaussian or poisson')
     
     if distbn == 'beta':
         if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
@@ -67,6 +67,13 @@ def generate_WSBM(n, pi, params, distbn):
         
         Z = np.random.choice(range(K), p=pi, size=n)
         A = symmetrises(stats.expon.rvs(scale = 1/params[0][Z,:][:,Z]))
+        
+    if distbn == 'gamma':
+        if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
+            raise ValueError('params must be two square matrices size K-by-K [alphas, betas]')
+            
+        Z = np.random.choice(range(K), p=pi, size=n)
+        A = symmetrises(stats.gamma.rvs(a = params[0][Z,:][:,Z], scale = 1/params[1][Z,:][:,Z]))
         
     if distbn == 'gaussian':
         if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
@@ -89,7 +96,7 @@ def generate_WMMSBM(n, alpha, params, distbn):
     K = len(alpha)
     
     if distbn not in ['beta', 'exponential', 'gaussian', 'poisson']:
-        raise ValueError('distbn must be beta, gaussian or poisson')
+        raise ValueError('distbn must be beta, exponential, gaussian or poisson')
     
     if distbn == 'beta':
         if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
@@ -106,6 +113,14 @@ def generate_WMMSBM(n, alpha, params, distbn):
         Z = stats.dirichlet.rvs(alpha, size=n)
         Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
         A = symmetrises(stats.expon.rvs(scale = 1/params[0][Zij,Zij.T]))
+        
+    if distbn == 'gamma':
+        if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
+            raise ValueError('params must be two square matrices size K-by-K [alphas, betas]')
+            
+        Z = stats.dirichlet.rvs(alpha, size=n)
+        Zij = np.array([np.random.choice(range(K), p=Zi, size=n) for Zi in Z])
+        A = symmetrises(stats.gamma.rvs(a = params[0][Zij,Zij.T], scale = 1/params[1][Zij,Zij.T]))
         
     if distbn == 'gaussian':
         if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
