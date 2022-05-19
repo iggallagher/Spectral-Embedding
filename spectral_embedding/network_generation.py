@@ -141,7 +141,7 @@ def generate_WMMSBM(n, alpha, params, distbn):
     return (A, Z)
 
 
-def generate_ZISBM(n, pi, a=1, b=1, params, distbn):
+def generate_ZISBM(n, pi, params, distbn, a=1, b=1):
     K = len(pi)
     
     if distbn not in ['beta', 'exponential', 'gamma', 'gaussian', 'poisson']:
