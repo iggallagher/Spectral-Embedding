@@ -153,8 +153,8 @@ def generate_ZISBM(n, pi, a=1, b=1, params, distbn):
         
         W = stats.beta.rvs(size=n, a=a, b=b)
         Z = np.random.choice(range(K), p=pi, size=n)
-        A = symmetrises(stats.beta.rvs(a = params[0][Z,:][:,Z], b = params[1][Z,:][:,Z])) *
-            symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
+        A = symmetrises(stats.beta.rvs(a = params[0][Z,:][:,Z], b = params[1][Z,:][:,Z]))
+        ZI = symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
         
     if distbn == 'exponential':
         if len(params) != 1 or params[0].shape != (K,K):
@@ -162,8 +162,8 @@ def generate_ZISBM(n, pi, a=1, b=1, params, distbn):
         
         W = stats.beta.rvs(size=n, a=a, b=b)
         Z = np.random.choice(range(K), p=pi, size=n)
-        A = symmetrises(stats.expon.rvs(scale = 1/params[0][Z,:][:,Z])) *
-            symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
+        A = symmetrises(stats.expon.rvs(scale = 1/params[0][Z,:][:,Z]))
+        ZI = symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
         
     if distbn == 'gamma':
         if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
@@ -171,8 +171,8 @@ def generate_ZISBM(n, pi, a=1, b=1, params, distbn):
             
         W = stats.beta.rvs(size=n, a=a, b=b)
         Z = np.random.choice(range(K), p=pi, size=n)
-        A = symmetrises(stats.gamma.rvs(a = params[0][Z,:][:,Z], scale = 1/params[1][Z,:][:,Z])) *
-            symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
+        A = symmetrises(stats.gamma.rvs(a = params[0][Z,:][:,Z], scale = 1/params[1][Z,:][:,Z]))
+        ZI = symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
         
     if distbn == 'gaussian':
         if len(params) != 2 or params[0].shape != (K,K) or params[1].shape != (K,K):
@@ -180,8 +180,8 @@ def generate_ZISBM(n, pi, a=1, b=1, params, distbn):
             
         W = stats.beta.rvs(size=n, a=a, b=b)
         Z = np.random.choice(range(K), p=pi, size=n)
-        A = symmetrises(stats.norm.rvs(loc = params[0][Z,:][:,Z], scale = np.sqrt(params[1][Z,:][:,Z]))) *
-            symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
+        A = symmetrises(stats.norm.rvs(loc = params[0][Z,:][:,Z], scale = np.sqrt(params[1][Z,:][:,Z])))
+        ZI = symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
         
     if distbn == 'poisson':
         if len(params) != 1 or params[0].shape != (K,K):
@@ -189,10 +189,10 @@ def generate_ZISBM(n, pi, a=1, b=1, params, distbn):
         
         W = stats.beta.rvs(size=n, a=a, b=b)
         Z = np.random.choice(range(K), p=pi, size=n)
-        A = symmetrises(stats.poisson.rvs(mu = params[0][Z,:][:,Z])) *
-            symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
+        A = symmetrises(stats.poisson.rvs(mu = params[0][Z,:][:,Z]))
+        ZI = symmetrises(stats.bernoulli.rvs(np.outer(W,W)))
     
-    return (A, Z, W)
+    return (A*ZI, Z, W)
 
 
 def generate_WSBM_zero(n, pi, params, distbn, rho):
