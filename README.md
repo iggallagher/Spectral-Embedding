@@ -78,7 +78,11 @@ These embedding techniques are then used for different represenations of a graph
 
 The embedding techniques are also used to embed a time series of adjacency matrices.
 - `UASE(As, d)`: Compute the d-dimensional left and right unfolded adjacency spectral embedding for a sequence of adjacency matrices As.
-- `omnibus(As, d)`: Compute the d-dimensional omnibus spectral embedding for a sequence of adjacency matrices As. For more details see Levin, K., Athreya, A., Tang, M., Lyzinski, V., Park, Y., and Priebe, C. E. (2017). A central limit theorem for an omnibus embedding of multiple random graphs and implications for multiscale network inference. [*arXiv preprint arXiv:1705.09355*](https://arxiv.org/abs/1705.09355)
+- `omnibus(As, d)`: Compute the d-dimensional omnibus spectral embedding for a sequence of adjacency matrices As. For more details see Levin, K., Athreya, A., Tang, M., Lyzinski, V., Park, Y., and Priebe, C. E. (2017). A central limit theorem for an omnibus embedding of multiple random graphs and implications for multiscale network inference. [*arXiv preprint arXiv:1705.09355*](https://arxiv.org/abs/1705.09355).
+
+This section also includes functionality to choose the dimensionality for an adjacency spectral embeddding. For more details see Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the scree plot via the use of profile likelihood.
+- `dim_select(A, max_dim=100)`: Compute the profile likelihood for the singular values of the singular value decomposition of an adjacency matrix A considering the first max_dim singular values.
+- `plot_dim_select(lq_best, lq, S, max_plot=50)`: Produce a visualation of the output of the `dim_select` function; lq_best, lq, S.
 
 ### distribution.py
 TO DO
