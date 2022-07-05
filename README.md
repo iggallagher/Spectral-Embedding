@@ -45,8 +45,9 @@ TO DO
 
 ### network_generation.py
 This collection of functions generates random graphs based on the stochastic block model and its variations.
-
-#### `generate_SBM(n, B, pi)`
+- `generate_SBM(n, B, pi)`: Generate a stochastic block model with n nodes using block mean matix B and community role assignment pi.
+- `generate_MMSBM(n, B, alpha)`: Generate a mixed membership stochastic block model with n nodes using block mean matix B where community distribution generated using a Dirichlet distribution using parameter alpha.
+- `generate_DCSBM(n, B, pi, a=1, b=1)`: Generate a degree-corrected stochastic block model with n nodes using block mean matix B and community role assignment pi. Node-specific weights are generated using a beta distribution using parameters a and b.
 
 ### embedding.py
 TO DO
