@@ -85,7 +85,22 @@ This section also includes functionality to choose the dimensionality for an adj
 - `plot_dim_select(lq_best, lq, S, max_plot=50)`: Produce a visualation of the output of the `dim_select` function; lq_best, lq, S.
 
 ### distribution.py
-TO DO
+This collection of functions computes the asymptotic distributions for the adjacency spectral embedding of the stochastic block model and its variations using the central limit theorems from the papers discussed in the Introduction.
+- `SBM_distbn(A, B, Z, pi, d)`: Compute the asymptotic distribuion for the adjacency spectral embedding of the stochastic block model with adjacency matrix A, block mean matrix B, community assignment Z, community assignment probabilities pi, and embedding dimension d. The output is the asymptotic means and covariances for each of the K communities.
+- `MMSBM_distbn(A, B, Z, alpha, d, zs)`: Compute the asymptotic distribuion for the adjacency spectral embedding of the mixed membership stochastic block model with adjacency matrix A, block mean matrix B, community assignment distributions Z, Dirichlet distribution parameter alpha, and embedding dimension d. The output is the asymptotic means and covariances for each of the community assignment distributions given by zs.
+- `DCSBM_distbn(A, B, Z, pi, d, ws, a=2, b=2)`: Compute the asymptotic distribuion for the adjacency spectral embedding of the degree-corrected stochastic block model with adjacency matrix A, block mean matrix B, community assignment Z, community assignment probabilities pi, and embedding dimension d, where the node-specific weights are generated using a beta distribution using parameters a and b. The output is the asymptotic means and covariances for each of the K communities with weights given by ws.
+
+These all have weighted versions which work in the same way except the block variance matrix C must also be provided.
+- `WSBM_distbn(A, B, C, Z, pi, d)`.
+- `WMMSBM_distbn(A, B, C, Z, alpha, d, zs)`.
+- `WDCSBM_distbn(A, B, C, Z, pi, d, ws, a=2, b=2)`.
+
+There also exists functions to compute the asymptotic distributions for the right unfolded adjacency spectral embedding for a sequence of (weighted) stochastic block models.
+- `SBM_dynamic_distbn(As, Bs, Z, pi, d)`: Compute the asymptotic distribuion for the right unfolded adjacency spectral embedding for a sequence of stochastic block models with adjacency matrices As, block mean matrices Bs, community assignment Z, community assignment probabilities pi, and embedding dimension d. The output is the asymptotic means and covariances for each of the K communities for each adjacency matrix.
+- `WSBM_dynamic_distbn(As, Bs, Cs, Z, pi, d)`: A weighted version of the previous function also using the sequence of block variance matrices Cs.
+
+Finally, this section also includes a function to aid plotting the resulting asymptotic distributions produced by the other functions.
+- `gaussian_ellipse(mean, cov)`: Produce a curve corresponding to the 95% confidence ellipses of a Gaussian distribuion with a specific mean and covariance.
 
 ### chernoff.py
 TO DO
