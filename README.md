@@ -103,4 +103,9 @@ Finally, this section also includes a function to aid plotting the resulting asy
 - `gaussian_ellipse(mean, cov)`: Produce a curve corresponding to the 95% confidence ellipses of a Gaussian distribuion with a specific mean and covariance.
 
 ### chernoff.py
-TO DO
+This collection of functions computes the size-adjusted Chernoff information for the adjacency spectral embedding of a stochastic block model.
+- `chernoff(X, SigmaXs)`: Compute the size-adjusted Chernoff information of an embedding with means X and covariances SigmaXs. If there are more than two communities, the worst size-adjusted Chernoff information is outputted.
+- `chernoff_full(X, SigmaXs)`: Compute all the size-adjusted Chernoff informations of an embedding with means X and covariances SigmaXs. If there are more than two communities, the size-adjusted Chernoff information for every pair of communities is outputted.
+
+The section also includes some utility functions for the optimisation of the size-adjusted Chernoff information calculations.
+ 
