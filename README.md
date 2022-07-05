@@ -56,10 +56,14 @@ These all have weighted versions where edge weights can be generated from a beta
 - `generate_WMMSBM_zero(n, alpha, params, distbn, rho)`: Same as the above but with a sparsity parameter rho that dictates how many edges are present in the graph.
 - `generate_ZISBM(n, pi, params, distbn, a=1, b=1)`: Generate a zero-inflated stochastic block model (the weighted version of the degree-corrected stochastic block model) with n nodes using community role assignment pi. Node-specific weights are generated using a beta distribution using parameters a and b. Given the distribution distbn, the list of matrices params give the necessary parameters for the distributions for each of the different communities.
 
-Finally, there exists dynamic versions of the stochastic block model and its variations generation a time series of graphs. In each case, the number of networks is given by the length of the array of block mean matrices Bs.
+There exists dynamic versions of the stochastic block model and its variations generation a time series of graphs. In each case, the number of networks is given by the length of the array of block mean matrices Bs.
 - `generate_SBM_dynamic(n, Bs, pi)`: Generate a sequence of stochastic block models with n nodes using block mean matrices Bs and community role assignment pi.
 - `generate_MMSBM_dynamic(n, Bs, alpha)`: Generate a mixed membership stochastic block model with n nodes using block mean matrices Bs where the community distributions are generated using a Dirichlet distribution using parameter alpha. The number of networks is given by the length of Bs.
 - `generate_DCSBM_dynamic(n, Bs, pi)`: Generate a degree-corrected stochastic block model with n nodes using block mean matrices Bs and community role assignment pi. Node-specific weights are generated using a beta distribution using parameters a and b.
+
+Finally, there are some utility functions that may be useful for generate random graphs.
+- `symmetrises(A, diag=False)`: Return a symmetric version of the matrix A using the lower right triangle of the matrix. The parameter diag determines whether the diagonal of the matrix A should be kept or set to zero.
+- `generate_B(K, rho=1)`: Generate a random block mean matrix for K communities with maximum value given by rho.
 
 ### embedding.py
 TO DO
