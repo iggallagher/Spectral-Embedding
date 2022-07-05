@@ -44,7 +44,9 @@ TO DO
 ## Functions
 
 ### network_generation.py
-TO DO
+This collection of functions generates random graphs based on the stochastic block model and its variations.
+
+#### `generate_SBM(n, B, pi)`
 
 ### embedding.py
 TO DO
