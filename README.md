@@ -45,9 +45,16 @@ TO DO
 
 ### network_generation.py
 This collection of functions generates random graphs based on the stochastic block model and its variations.
-- `generate_SBM(n, B, pi)`: Generate a stochastic block model with n nodes using block mean matix B and community role assignment pi.
-- `generate_MMSBM(n, B, alpha)`: Generate a mixed membership stochastic block model with n nodes using block mean matix B where community distribution generated using a Dirichlet distribution using parameter alpha.
+- `generate_SBM(n, B, pi)`: Generate a stochastic block model with n nodes using block mean matix B and community role assignment pi:
+- `generate_MMSBM(n, B, alpha)`: Generate a mixed membership stochastic block model with n nodes using block mean matix B where the community distributions are generated using a Dirichlet distribution using parameter alpha.
 - `generate_DCSBM(n, B, pi, a=1, b=1)`: Generate a degree-corrected stochastic block model with n nodes using block mean matix B and community role assignment pi. Node-specific weights are generated using a beta distribution using parameters a and b.
+
+These all have weighted versions where edge weights can be generated from a beta, exponential, gamma, Gaussian or Poisson:
+- `generate_WSBM(n, pi, params, distbn)`: Generate a weighted stochastic block model with n nodes and community role assignment pi. Given the distribution distbn, the list of matrices params give the necessary parameters for the distributions for each of the different communities.
+- `generate_WSBM_zero(n, pi, params, distbn, rho)`: Same as the above but with a sparsity parameter rho that dictates how many edges are present in the graph.
+- `generate_WMMSBM(n, alpha, params, distbn)`: Generate a mixed membership stochastic block model with n nodes where the community distributions are generated using a Dirichlet distribution using parameter alpha. Given the distribution distbn, the list of matrices params give the necessary parameters for the distributions for each of the different communities.
+- `generate_WMMSBM_zero(n, alpha, params, distbn, rho)`: Same as the above but with a sparsity parameter rho that dictates how many edges are present in the graph.
+- `generate_ZISBM(n, pi, params, distbn, a=1, b=1)`: Generate a zero-inflated stochastic block model (the weighted version of the degree-corrected stochastic block model) with n nodes using community role assignment pi. Node-specific weights are generated using a beta distribution using parameters a and b. Given the distribution distbn, the list of matrices params give the necessary parameters for the distributions for each of the different communities.
 
 ### embedding.py
 TO DO
