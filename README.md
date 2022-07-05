@@ -66,7 +66,18 @@ Finally, there are some utility functions that may be useful for generate random
 - `generate_B(K, rho=1)`: Generate a random block mean matrix for K communities with maximum value given by rho.
 
 ### embedding.py
-TO DO
+This collection of functions computes different spectral embeddings of a network. All of the techniques involved rely on the left and right spectral embedding from a singular value decomposition of a matrix. All of these algorithms allow for the matrix A to be a sparse or dense matrix.
+- `left_embed(A, d)`: Compute the d-dimensional spectral embedding using the left singular values and vectors of the d-truncated singular value decomposition of the matrix A.
+- `right_embed(A, d)`: Compute the d-dimensional spectral embedding using the right singular values and vectors of the d-truncated singular value decomposition of the matrix A.
+- `both_embed(A, d)`: Compute both the left and right d-dimensional spectral embeddings given above.
+
+These embedding techniques are then used for different represenations of a graph adjacency matrix.
+- `ASE(A, d)`: Compute the d-dimensional adjacency spectral embedding of an adjacency matrix A.
+- `LSE(A, d)`: Compute the d-dimensional Laplacian spectral embedding of an adjacency matrix A.
+- `RWSE(A, d)`: Compute the d-dimensional random walk spectral embedding of an adjacency matrix A.
+The embedding techniques are also used to embed a time series of adjacency matrices.
+- `UASE(As, d)`: Compute the d-dimensional left and right unfolded adjacency spectral embedding for a sequence of adjacency matrices As.
+- `omnibus(As, d)`: Compute the d-dimensional omnibus spectral embedding for a sequence of adjacency matrices As.
 
 ### distribution.py
 TO DO
