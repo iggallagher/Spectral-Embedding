@@ -75,9 +75,10 @@ These embedding techniques are then used for different represenations of a graph
 - `ASE(A, d)`: Compute the d-dimensional adjacency spectral embedding of an adjacency matrix A.
 - `LSE(A, d)`: Compute the d-dimensional Laplacian spectral embedding of an adjacency matrix A.
 - `RWSE(A, d)`: Compute the d-dimensional random walk spectral embedding of an adjacency matrix A.
+
 The embedding techniques are also used to embed a time series of adjacency matrices.
 - `UASE(As, d)`: Compute the d-dimensional left and right unfolded adjacency spectral embedding for a sequence of adjacency matrices As.
-- `omnibus(As, d)`: Compute the d-dimensional omnibus spectral embedding for a sequence of adjacency matrices As.
+- `omnibus(As, d)`: Compute the d-dimensional omnibus spectral embedding for a sequence of adjacency matrices As. For more details see Levin, K., Athreya, A., Tang, M., Lyzinski, V., Park, Y., and Priebe, C. E. (2017). A central limit theorem for an omnibus embedding of multiple random graphs and implications for multiscale network inference. [*arXiv preprint arXiv:1705.09355*](https://arxiv.org/abs/1705.09355)
 
 ### distribution.py
 TO DO
