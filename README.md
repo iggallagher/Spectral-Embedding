@@ -29,8 +29,10 @@ The package can be installed via pip using the command:
 
 ## Examples
 
+Below is a brief introduction to each of the examples included in the package outlining some of the key functionality and the functions that provide it.
+
 ### Stochastic Block Model Embedding.ipynb
-TO DO
+This example introduces the different network generation and embedding functions in the package. Three small example networks are randomly generated; a two-community stochastic block model (`generate_SBM`), mixed membership stochastic block model (`generate_MMSBM`) and a degree-corrected stochastic block model (`generate_DCSBM`). These are embedded into two dimensions using the adjacency spectral embedding (`ASE`) and Laplacian spectral embedding (`LSE`). We expain the structure of the resulting embeddings compared to the community structure in the different variations of the stochastic block model.
 
 ### Weighted Stochastic Block Models.ipynb
 TO DO
