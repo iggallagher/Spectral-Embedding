@@ -29,13 +29,22 @@ The package can be installed via pip using the command:
 
 ## Examples
 
-Below is a brief introduction to each of the examples included in the package outlining some of the key functionality and the functions that provide it.
+Below is a brief introduction to each of the examples included in the package outlining some of the key functionality.
 
 ### Stochastic Block Model Embedding.ipynb
-This example introduces the different network generation and embedding functions in the package. Three small example networks are randomly generated; a two-community stochastic block model (`generate_SBM`), mixed membership stochastic block model (`generate_MMSBM`) and a degree-corrected stochastic block model (`generate_DCSBM`). These are embedded into two dimensions using the adjacency spectral embedding (`ASE`) and Laplacian spectral embedding (`LSE`). We expain the structure of the resulting embeddings compared to the community structure in the different variations of the stochastic block model.
+This example introduces the different network generation and embedding functions. Three small example networks are randomly generated; a two-community stochastic block model, mixed membership stochastic block model and a degree-corrected stochastic block model. These are embedded into two dimensions using the adjacency spectral embedding and Laplacian spectral embedding. We expain the structure of the resulting embeddings compared to the community structure in the different variations of the stochastic block model.
+
+See this notebook for examples of the following functions:
+- Network generation: `generate_SBM`, `generate_MMSBM` and `generate_DCSBM`,
+- Spectral embedding: `ASE` and `LSE`.
 
 ### Weighted Stochastic Block Models.ipynb
-TO DO
+This example introduces weighted network generation, asymptotic distribution and size-adjusted Chernoff information functions. A weighted two-community stochastic block model is generated where edges have a Poisson distribution which is embedded into two dimensions using adjacency spectral embedding. The asymptotic distribution of the spectral embedding for both communities is computed and shown as a Gaussian mixture model, and the size-adjusted Chernoff information is calculated. This is compared to an entry-wise transformation of the weighted network which records whether an edge has a non-zero weight.
+
+See this notebook for examples of the following functions:
+- Weighted network generation: `generate_WSBM`,
+- Asymptotic distribution calculation: `WSBM_distbn`,
+- Size-adjusted Chernoff information calculation: `chernoff`.
 
 ### Dynamic Network Embedding.ipynb
 TO DO
