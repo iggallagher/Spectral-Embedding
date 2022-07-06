@@ -64,7 +64,10 @@ See this notebook for examples of the following functions:
 - Asymptotic distribution calculation: `SBM_dynamic_distbn`, `SBM_distbn` and `gaussian_ellipse`.
 
 ### Sparse Matrix Embedding.ipynb
-TO DO
+This example introduces adjacency spectral embedding for sparse networks. There is currently no functionality to generate random sparse networks, but the example covers adjacency spectral embedding, Laplacian spectral embedding and unfolded adjacency spectral embedding for sparse networks.
+
+See this notebook for examples of the following functions:
+- Spectral embedding: `ASE`, `LSE` and `UASE`.
 
 ## Functions
 
