@@ -43,8 +43,17 @@ This example introduces weighted network generation, asymptotic distribution and
 
 See this notebook for examples of the following functions:
 - Weighted network generation: `generate_WSBM`,
+- Spectral embedding: `ASE`,
 - Asymptotic distribution calculation: `WSBM_distbn`,
 - Size-adjusted Chernoff information calculation: `chernoff`.
+
+### Mixed Membership and Degree-Corrected SBM Distributions.ipynb ###
+This example introduces asymptotic distribution functions for the mixed membership stochastic block model and degree-corrected stochastic block model. A two-community mixed membership stochastic block model and a degree-corrected stochastic block model are generated and both are embedded into two dimensions using adjacency spectral embedding. The asymptotic distribution of the spectral embedding is computed for different community assignment probabilities for the mixed membership stochastic block model and for different weights for the degree-corrected stochastic block model.
+
+See this notebook for examples of the following functions:
+- Network generation: `generate_MMSBM` and `generate_DCSBM`,
+- Spectral embedding: `ASE`,
+- Asymptotic distribution calculation: `MMSBM_distbn` and `DCSBM_distbn`.
 
 ### Dynamic Network Embedding.ipynb
 TO DO
