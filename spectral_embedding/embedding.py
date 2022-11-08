@@ -101,12 +101,16 @@ def omnibus(As, d):
     return YAs
     
 
-def dim_select(A, max_dim=100):        
-    SA = np.linalg.svd(A, compute_uv=False)
-    
+def dim_select(A, max_dim=100):
     # If no max dimension chosen or above number of nodes, set to the number of nodes
-    if max_dim == 0 or max_dim > len(SA):
-        max_dim = len(SA)
+    if max_dim == 0 or max_dim > A.shape[0]:
+        max_dim = A.shape[0]
+    
+    if sparse.issparse(A):
+        _, SA, _ = sparse.linalg.svds(A, max_dim)
+        SA = np.flip(SA)
+    else:
+        SA = np.linalg.svd(A, compute_uv=False)
     
     # Compute likelihood profile
     lq = np.zeros(max_dim-1)
