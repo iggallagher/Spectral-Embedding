@@ -20,7 +20,7 @@ There are also a number of example Python notebooks which demonstrate different 
 - **Examples** goes through the example Python notebooks is detail, describe which functions of the package are being used.
 - **Functions** gives a full description of the functions in the four different sections, explaining input, output and function parameters.
 
-Note that this package is still in development, so please check back here for information regarding updates, new functionality and examples added to this package. If there is anything you would like to see included in this package, or to report bugs and error, please email me at ian.gallagher@bristol.ac.uk.
+Note that this package is still in development, so please check back here for information regarding updates, new functionality and examples added to this package. If there is anything you would like to see included in this package, or to report bugs and errors, please email me at ian.gallagher@bristol.ac.uk.
 
 ## Installation
 
