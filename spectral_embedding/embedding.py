@@ -55,8 +55,8 @@ def right_embed(A, d, version='sqrt'):
 
 
 def both_embed(A, d, version='sqrt'):
-    if version not in ['full', 'none', 'sqrt']:
-        raise ValueError('version must be full, none or sqrt (default)')
+    if version not in ['fullleft', 'fullright', 'noneleft', 'noneright', 'sqrt']:
+        raise ValueError('version must be fullleft (noneright), fullright (noneleft) or sqrt (default)')
         
     if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
@@ -64,24 +64,24 @@ def both_embed(A, d, version='sqrt'):
         if version == 'sqrt':
             XA = np.fliplr(UA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
             YA = np.fliplr(VA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
-        if version == 'full':
+        if version == 'fullleft' or version == 'noneright':
             XA = np.fliplr(UA[:,0:d]) @ np.diag(np.flip(SA[0:d]))
-            YA = np.fliplr(VA[:,0:d]) @ np.diag(np.flip(SA[0:d]))
-        if version == 'none':
+            YA = np.fliplr(VA[:,0:d])
+        if version == 'noneleft' or version == 'fullright':
             XA = np.fliplr(UA[:,0:d])
-            YA = np.fliplr(VA[:,0:d])   
+            YA = np.fliplr(VA[:,0:d]) @ np.diag(np.flip(SA[0:d])) 
     else:
         UA, SA, VAt = np.linalg.svd(A)
         VA = VAt.T
         if version == 'sqrt':
             XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))
             YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
-        if version == 'full':
+        if version == 'fullleft' or version == 'noneright':
             XA = UA[:,0:d] @ np.diag(SA[0:d])
-            YA = VA[:,0:d] @ np.diag(SA[0:d])
-        if version == 'none':
-            XA = UA[:,0:d]
             YA = VA[:,0:d]
+        if version == 'noneleft' or version == 'fullright':
+            XA = UA[:,0:d]
+            YA = VA[:,0:d] @ np.diag(SA[0:d])
             
     return (XA, YA)
 
@@ -125,8 +125,8 @@ def RWSE(A, d, version='sqrt'):
 
 
 def UASE(As, d, version='sqrt'):
-    if version not in ['full', 'none', 'sqrt']:
-        raise ValueError('version must be full, none or sqrt (default)')
+    if version not in ['fullleft', 'fullright', 'noneleft', 'noneright', 'sqrt']:
+        raise ValueError('version must be fullleft (noneright), fullright (noneleft) or sqrt (default)')
     
     T = len(As)
     n = As[0].shape[0]
