@@ -95,17 +95,19 @@ Finally, there are some utility functions that may be useful for generate random
 
 ### embedding.py
 This collection of functions computes different spectral embeddings of a network. All of the techniques involved rely on the left and right spectral embedding from a singular value decomposition of a matrix. All of these algorithms allow for the matrix A to be a sparse or dense matrix.
-- `left_embed(A, d)`: Compute the d-dimensional spectral embedding using the left singular values and vectors of the d-truncated singular value decomposition of the matrix A.
-- `right_embed(A, d)`: Compute the d-dimensional spectral embedding using the right singular values and vectors of the d-truncated singular value decomposition of the matrix A.
-- `both_embed(A, d)`: Compute both the left and right d-dimensional spectral embeddings given above.
+- `left_embed(A, d, version='sqrt')`: Compute the d-dimensional spectral embedding using the left singular values and vectors of the d-truncated singular value decomposition of the matrix A.
+- `right_embed(A, d, version='sqrt')`: Compute the d-dimensional spectral embedding using the right singular values and vectors of the d-truncated singular value decomposition of the matrix A.
+- `both_embed(A, d, version='sqrt')`: Compute both the left and right d-dimensional spectral embeddings given above.
+
+These embeddings have a `version` parameter whcih determines which factorisation of the matrix A should be used. In all cases, the default option is `version='sqrt'`, when, given the singular value decomposition $A = U S V^\top$, the left embedding is given by $\hat{X} = US^{1/2}$ and the right embedding by $\hat{Y} = VS^{1/2}$.
 
 These embedding techniques are then used for different represenations of a graph adjacency matrix.
-- `ASE(A, d)`: Compute the d-dimensional adjacency spectral embedding of an adjacency matrix A.
-- `LSE(A, d)`: Compute the d-dimensional Laplacian spectral embedding of an adjacency matrix A.
-- `RWSE(A, d)`: Compute the d-dimensional random walk spectral embedding of an adjacency matrix A.
+- `ASE(A, d, version='sqrt')`: Compute the d-dimensional adjacency spectral embedding of an adjacency matrix A.
+- `LSE(A, d, version='sqrt')`: Compute the d-dimensional Laplacian spectral embedding of an adjacency matrix A.
+- `RWSE(A, d, version='sqrt')`: Compute the d-dimensional random walk spectral embedding of an adjacency matrix A.
 
 The embedding techniques are also used to embed a time series of adjacency matrices.
-- `UASE(As, d)`: Compute the d-dimensional left and right unfolded adjacency spectral embedding for a sequence of adjacency matrices As.
+- `UASE(As, d, version='sqrt')`: Compute the d-dimensional left and right unfolded adjacency spectral embedding for a sequence of adjacency matrices As.
 - `omnibus(As, d)`: Compute the d-dimensional omnibus spectral embedding for a sequence of adjacency matrices As. For more details see Levin, K., Athreya, A., Tang, M., Lyzinski, V., Park, Y., and Priebe, C. E. (2017). A central limit theorem for an omnibus embedding of multiple random graphs and implications for multiscale network inference. [*arXiv preprint arXiv:1705.09355*](https://arxiv.org/abs/1705.09355).
 
 This section also includes functionality to choose the dimensionality for an adjacency spectral embeddding. For more details see Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the scree plot via the use of profile likelihood.
