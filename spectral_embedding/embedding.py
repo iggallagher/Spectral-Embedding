@@ -4,39 +4,85 @@ import scipy.stats as stats
 import scipy.sparse as sparse
 
 
-def left_embed(A, d):
+def left_embed(A, d, version='sqrt'):
+    if version not in ['full', 'none', 'sqrt']:
+        raise ValueError('version must be full, none or sqrt (default)')
+        
     if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
-        XA = np.fliplr(UA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
+        if version == 'sqrt':
+            XA = np.fliplr(UA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
+        if version == 'full':
+            XA = np.fliplr(UA[:,0:d]) @ np.diag(np.flip(SA[0:d]))
+        if version == 'none':
+            XA = np.fliplr(UA[:,0:d])
     else:
         UA, SA, VAt = np.linalg.svd(A)
-        XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
+        if version == 'sqrt':
+            XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))
+        if version == 'full':
+            XA = UA[:,0:d] @ np.diag(SA[0:d])
+        if version == 'none':
+            XA = UA[:,0:d]
+            
     return XA
 
 
-def right_embed(A, d):
+def right_embed(A, d, version='sqrt'):
+    if version not in ['full', 'none', 'sqrt']:
+        raise ValueError('version must be full, none or sqrt (default)')
+        
     if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
         VA = VAt.T
-        YA = np.fliplr(VA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
+        if version == 'sqrt':
+            YA = np.fliplr(VA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
+        if version == 'full':
+            YA = np.fliplr(VA[:,0:d]) @ np.diag(np.flip(SA[0:d]))
+        if version == 'none':
+            YA = np.fliplr(VA[:,0:d])   
     else:
         UA, SA, VAt = np.linalg.svd(A)
         VA = VAt.T
-        YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
+        if version == 'sqrt':
+            YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
+        if version == 'full':
+            YA = VA[:,0:d] @ np.diag(SA[0:d])
+        if version == 'none':
+            YA = VA[:,0:d]
+            
     return YA
 
 
-def both_embed(A, d):
+def both_embed(A, d, version='sqrt'):
+    if version not in ['full', 'none', 'sqrt']:
+        raise ValueError('version must be full, none or sqrt (default)')
+        
     if sparse.issparse(A):
         UA, SA, VAt = sparse.linalg.svds(A, d)
         VA = VAt.T
-        XA = np.fliplr(UA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
-        YA = np.fliplr(VA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d]))) 
+        if version == 'sqrt':
+            XA = np.fliplr(UA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
+            YA = np.fliplr(VA[:,0:d]) @ np.diag(np.sqrt(np.flip(SA[0:d])))
+        if version == 'full':
+            XA = np.fliplr(UA[:,0:d]) @ np.diag(np.flip(SA[0:d]))
+            YA = np.fliplr(VA[:,0:d]) @ np.diag(np.flip(SA[0:d]))
+        if version == 'none':
+            XA = np.fliplr(UA[:,0:d])
+            YA = np.fliplr(VA[:,0:d])   
     else:
         UA, SA, VAt = np.linalg.svd(A)
         VA = VAt.T
-        XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))
-        YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
+        if version == 'sqrt':
+            XA = UA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))
+            YA = VA[:,0:d] @ np.diag(np.sqrt(SA[0:d]))  
+        if version == 'full':
+            XA = UA[:,0:d] @ np.diag(SA[0:d])
+            YA = VA[:,0:d] @ np.diag(SA[0:d])
+        if version == 'none':
+            XA = UA[:,0:d]
+            YA = VA[:,0:d]
+            
     return (XA, YA)
 
 
@@ -49,27 +95,39 @@ def safe_inv_sqrt(x):
         return np.power(x, -0.5)
 
 
-def ASE(A, d):
-    return left_embed(A, d)
+def ASE(A, d, version='sqrt'):
+    if version not in ['full', 'none', 'sqrt']:
+        raise ValueError('version must be full, none or sqrt (default)')
+    
+    return left_embed(A, d, version)
 
 
-def LSE(A, d):
+def LSE(A, d, version='sqrt'):
+    if version not in ['full', 'none', 'sqrt']:
+        raise ValueError('version must be full, none or sqrt (default)')
+        
     if sparse.issparse(A):
         L = sparse.csgraph.laplacian(A, normed=True)
     else:
         E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
         L = E @ A @ E
         
-    return left_embed(L, d)
+    return left_embed(L, d, version)
 
 
-def RWSE(A, d):
+def RWSE(A, d, version='sqrt'):
+    if version not in ['full', 'none', 'sqrt']:
+        raise ValueError('version must be full, none or sqrt (default)')
+    
     E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
-    XL = LSE(A, d)
+    XL = LSE(A, d, version)
     return (E @ XL)[:,1:]
 
 
-def UASE(As, d):
+def UASE(As, d, version='sqrt'):
+    if version not in ['full', 'none', 'sqrt']:
+        raise ValueError('version must be full, none or sqrt (default)')
+    
     T = len(As)
     n = As[0].shape[0]
     
@@ -78,7 +136,7 @@ def UASE(As, d):
     else:
         A = np.block([A for A in As])
         
-    XA, YA = both_embed(A, d)
+    XA, YA = both_embed(A, d, version)
     YAs = YA.reshape((T, n, d))
         
     return (XA, YAs)
