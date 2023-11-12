@@ -210,7 +210,7 @@ def WSBM_dynamic_distbn(As, Bs, Cs, Z, pi, d):
     Ys = np.zeros((T,K,d))
     
     for t in range(T):    
-        Ys[t] = VB[t*d:(t+1)*d,0:d] @ np.diag(np.sqrt(SB[0:d])) @ R       
+        Ys[t] = VB[t*K:(t+1)*K,0:d] @ np.diag(np.sqrt(SB[0:d])) @ R       
     
     SigmaYs = np.zeros((T,K,d,d))
     for t in range(T):
