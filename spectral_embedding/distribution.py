@@ -207,7 +207,7 @@ def WSBM_dynamic_distbn(As, Bs, Cs, Z, pi, d):
         Delta += pi[i]*np.outer(XB[i],XB[i])
     DeltaInv = np.linalg.inv(Delta)
 
-    Ys = np.zeros((T,d,d))
+    Ys = np.zeros((T,K,d))
     
     for t in range(T):    
         Ys[t] = VB[t*d:(t+1)*d,0:d] @ np.diag(np.sqrt(SB[0:d])) @ R       
