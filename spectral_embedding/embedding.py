@@ -124,6 +124,22 @@ def RWSE(A, d, version='sqrt'):
     return (E @ XL)[:,1:]
 
 
+def RLSE(A, d, gamma=None, version='sqrt'):
+    if version not in ['full', 'none', 'sqrt']:
+        raise ValueError('version must be full, none or sqrt (default)')
+
+    if gamma == None:
+        gamma = np.mean(np.mean(A, axis=1))
+    
+    if sparse.issparse(A):
+        E = sparse.diags(np.array([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)]).reshape(-1))
+    else:
+        E = np.diag([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)])
+    L = E @ A @ E
+        
+    return left_embed(L, d, version)
+    
+    
 def UASE(As, d, version='sqrt'):
     if version not in ['fullleft', 'fullright', 'noneleft', 'noneright', 'sqrt']:
         raise ValueError('version must be fullleft (noneright), fullright (noneleft) or sqrt (default)')
