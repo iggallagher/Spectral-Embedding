@@ -137,7 +137,7 @@ def RLSE(A, d, gamma=None, version='sqrt'):
     if sparse.issparse(A):
         E = sparse.diags(np.array([safe_inv_sqrt(d) for d in np.sum(A, axis=1)]).reshape(-1))
     else:
-        E = np.diag([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)])
+        E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=1)])
     L = E @ A @ E
         
     return left_embed(L, d, version)
