@@ -129,10 +129,10 @@ def RLSE(A, d, gamma=None, version='sqrt'):
         raise ValueError('version must be full, none or sqrt (default)')
 
     if gamma == None:
-        gamma = np.mean(np.mean(A, axis=1))
+        gamma = np.mean(np.sum(A, axis=1))
     
     if sparse.issparse(A):
-        E = sparse.diags(np.array([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)]).reshape(-1))
+        E = sparse.diags([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)])
     else:
         E = np.diag([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)])
     L = E @ A @ E
