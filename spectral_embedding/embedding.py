@@ -119,7 +119,10 @@ def RWSE(A, d, version='sqrt'):
     if version not in ['full', 'none', 'sqrt']:
         raise ValueError('version must be full, none or sqrt (default)')
     
-    E = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
+    if sparse.issparse(A):
+        E = sparse.diags(np.array([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)]).reshape(-1))
+    else:
+        E = np.diag([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)])
     XL = LSE(A, d, version)
     return (E @ XL)[:,1:]
 
@@ -132,7 +135,7 @@ def RLSE(A, d, gamma=None, version='sqrt'):
         gamma = np.mean(np.sum(A, axis=1))
     
     if sparse.issparse(A):
-        E = sparse.diags([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)])
+        E = sparse.diags(np.array([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)]).reshape(-1))
     else:
         E = np.diag([safe_inv_sqrt(d + gamma) for d in np.sum(A, axis=1)])
     L = E @ A @ E
