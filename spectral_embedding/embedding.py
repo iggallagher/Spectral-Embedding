@@ -161,6 +161,29 @@ def UASE(As, d, version='sqrt'):
     return (XA, YAs)
 
 
+def ULSE(As, d, version='sqrt'):
+    if version not in ['fullleft', 'fullright', 'noneleft', 'noneright', 'sqrt']:
+        raise ValueError('version must be fullleft (noneright), fullright (noneleft) or sqrt (default)')
+    
+    T = len(As)
+    n = As[0].shape[0]
+    
+    if np.all([sparse.issparse(A) for A in As]):
+        A = sparse.hstack(As)
+        E_L = sparse.diags([safe_inv_sqrt(d) for d in np.sum(A, axis=1)])
+        E_R = sparse.diags([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
+    else:
+        A = np.block([A for A in As])
+        E_L = np.diag(safe_inv_sqrt(d) for d in np.sum(A, axis=1)])
+        E_R = np.diag(safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
+
+    L = E_L @ A @ E_R
+    XL, YL = both_embed(L, d, version)
+    YLs = YL.reshape((T, n, d))
+        
+    return (XL, YLs)
+        
+        
 def omnibus(As, d):
     T = len(As)
     n = As[0].shape[0]
