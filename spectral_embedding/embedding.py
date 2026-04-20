@@ -151,7 +151,7 @@ def UASE(As, d, version='sqrt'):
     n = As[0].shape[0]
     
     if np.all([sparse.issparse(A) for A in As]):
-        A = sparse.hstack(As)
+        A = sparse.block_array([[As[t] for t in range(T)]])
     else:
         A = np.block([A for A in As])
         
@@ -169,7 +169,7 @@ def ULSE(As, d, version='sqrt'):
     n = As[0].shape[0]
     
     if np.all([sparse.issparse(A) for A in As]):
-        A = sparse.hstack(As)
+        A = sparse.block_array([[As[t] for t in range(T)]])
         E_L = sparse.diags([safe_inv_sqrt(d) for d in np.sum(A, axis=1)])
         E_R = sparse.diags([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
     else:
