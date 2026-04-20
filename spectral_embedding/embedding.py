@@ -174,8 +174,8 @@ def ULSE(As, d, version='sqrt'):
         E_R = sparse.diags([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
     else:
         A = np.block([A for A in As])
-        E_L = np.diag(safe_inv_sqrt(d) for d in np.sum(A, axis=1)])
-        E_R = np.diag(safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
+        E_L = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=1)])
+        E_R = np.diag([safe_inv_sqrt(d) for d in np.sum(A, axis=0)])
 
     L = E_L @ A @ E_R
     XL, YL = both_embed(L, d, version)
