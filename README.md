@@ -25,6 +25,7 @@ Note that this package is still in development, so please check back here for in
 ## Installation
 
 The package can be installed via pip using the command:
+
 `pip install git+https://github.com/iggallagher/Spectral-Embedding`.
 
 ## Examples
